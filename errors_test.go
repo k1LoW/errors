@@ -29,6 +29,13 @@ func k() error { return fmt.Errorf("error k: %w", i()) }
 func l() error { return errors.Join(a(), k()) }
 
 func TestWithStack(t *testing.T) {
+	t.Run("nil error", func(t *testing.T) {
+		err := errors.WithStack(nil)
+		if err != nil {
+			t.Errorf("got: %v, want: %v", err, nil)
+		}
+	})
+
 	t.Run("The first stack is retained.", func(t *testing.T) {
 		err := c()
 		if !errors.Is(err, errA) {

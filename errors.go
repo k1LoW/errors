@@ -10,6 +10,7 @@ import (
 
 var _ error = (*errorWithStack)(nil)
 
+// MaxStackDepth is the maximum depth of the stack trace.
 var MaxStackDepth = 50
 
 // As is a wrapper for [errors.As].

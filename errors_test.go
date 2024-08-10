@@ -232,3 +232,17 @@ func TestSlogJSON(t *testing.T) {
 		t.Error(`"frames":[{ not found`)
 	}
 }
+
+func TestSlogText(t *testing.T) {
+	buf := new(bytes.Buffer)
+	logger := slog.New(slog.NewTextHandler(buf, nil))
+	err := l()
+	logger.Info("test", slog.Any("stacktracs", errors.StackTraces(err)))
+	t.Log(buf.String())
+	if !strings.Contains(buf.String(), `stacktracs=`) {
+		t.Error("stacktracs= not found")
+	}
+	if !strings.Contains(buf.String(), "error a\\n") {
+		t.Error("error a\\n not found")
+	}
+}

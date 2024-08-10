@@ -2,6 +2,13 @@
 
 [errors](https://pkg.go.dev/errors) + stack staces.
 
+Key features of `k1LoW/errors` are:
+
+- Retain the stack traces once stacked as far as possible.
+    - Support for [`errors.Join`](https://pkg.go.dev/errors#Join).
+- It is possible to output stack traces in structured data.
+- Zero dependency
+
 ## Usage
 
 ```go
@@ -13,7 +20,7 @@ import (
 
 ## Difference between `errors` and `k1LoW/errors`
 
-- The behaviour of methods with the same name as the [errors](https://pkg.go.dev/errors) package is the same.
+- The behaviour of methods with the same name as the [`errors`](https://pkg.go.dev/errors) package is the same.
 - `k1LoW/errors` has [`WithStack`](https://pkg.go.dev/github.com/k1LoW/errors#WithStack) and [`StackTraces`](https://pkg.go.dev/github.com/k1LoW/errors#StackTraces) functions.
 
 ## References

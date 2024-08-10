@@ -2,7 +2,6 @@ package errors
 
 import (
 	"errors"
-	"fmt"
 	"runtime"
 )
 
@@ -58,9 +57,6 @@ func WithStack(err error) error {
 	if errors.As(err, &errws) {
 		return errws
 	} else {
-		if _, ok := err.(error); !ok {
-			err = fmt.Errorf("%v", err)
-		}
 		errws = &errorWithStack{
 			Err:   err,
 			stack: stack[:length],

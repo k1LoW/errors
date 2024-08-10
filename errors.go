@@ -10,26 +10,42 @@ var _ error = (*errorWithStack)(nil)
 
 var MaxStackDepth = 50
 
+// As is a wrapper for [errors.As].
+//
+// [errors.As]: https://pkg.go.dev/errors#As
 func As(err error, target any) bool {
 	return errors.As(err, target)
 }
 
+// Is is a wrapper for [errors.Is].
+//
+// [errors.Is]: https://pkg.go.dev/errors#Is
 func Is(err, target error) bool {
 	return errors.Is(err, target)
 }
 
+// Join is a wrapper for [errors.Join].
+//
+// [errors.Join]: https://pkg.go.dev/errors#Join
 func Join(errs ...error) error {
 	return errors.Join(errs...)
 }
 
+// New is a wrapper for [errors.New].
+//
+// [errors.New]: https://pkg.go.dev/errors#New
 func New(text string) error {
 	return errors.New(text)
 }
 
+// Unwrap is a wrapper for [errors.Unwrap].
+//
+// [errors.Unwrap]: https://pkg.go.dev/errors#Unwrap
 func Unwrap(err error) error {
 	return errors.Unwrap(err)
 }
 
+// WithStack sets the stack trace for the given error.
 func WithStack(err error) error {
 	if err == nil {
 		return nil
@@ -53,6 +69,7 @@ func WithStack(err error) error {
 	return errws
 }
 
+// StackTraces returns the stack traces of the given error(s).
 func StackTraces(err error) []*errorWithStack {
 	je, ok := err.(joinError)
 	if ok {

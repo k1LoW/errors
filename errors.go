@@ -1,8 +1,11 @@
 package errors
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 	"runtime"
+	"strings"
 )
 
 var _ error = (*errorWithStack)(nil)
@@ -66,24 +69,26 @@ func WithStack(err error) error {
 }
 
 // StackTraces returns the stack traces of the given error(s).
-func StackTraces(err error) []*errorWithStack {
+func StackTraces(err error) stackTraces {
 	je, ok := err.(joinError)
 	if ok {
 		// joined error
-		var errwss []*errorWithStack
+		var traces stackTraces
 		errs := je.Unwrap()
 		for _, e := range errs {
-			errwss = append(errwss, StackTraces(e)...)
+			traces = append(traces, StackTraces(e)...)
 		}
-		return errwss
+		return traces
 	}
 	var errws *errorWithStack
 	if !errors.As(err, &errws) {
 		return nil
 	}
 	errws.genFrames()
-	return []*errorWithStack{errws}
+	return stackTraces{errws}
 }
+
+type stackTraces []*errorWithStack
 
 type errorWithStack struct {
 	Err    error   `json:"error"`
@@ -97,6 +102,23 @@ type frame struct {
 	Line int    `json:"line"`
 }
 
+func (traces stackTraces) String() string {
+	var sb strings.Builder
+	for _, errws := range traces {
+		sb.WriteString(errws.Error())
+		sb.WriteString("\n")
+		for _, frame := range errws.Frames {
+			sb.WriteString(frame.Name)
+			sb.WriteString("\n\t")
+			sb.WriteString(frame.File)
+			sb.WriteString(":")
+			sb.WriteString(fmt.Sprintf("%d", frame.Line))
+			sb.WriteString("\n")
+		}
+	}
+	return sb.String()
+}
+
 func (errws *errorWithStack) Error() string {
 	msg := errws.Err.Error()
 	return msg
@@ -104,6 +126,17 @@ func (errws *errorWithStack) Error() string {
 
 func (errws *errorWithStack) Unwrap() error {
 	return errws.Err
+}
+
+func (errws *errorWithStack) MarshalJSON() ([]byte, error) {
+	s := struct {
+		Error  string  `json:"error"`
+		Frames []frame `json:"frames"`
+	}{
+		Error:  errws.Error(),
+		Frames: errws.Frames,
+	}
+	return json.Marshal(s)
 }
 
 type joinError interface {

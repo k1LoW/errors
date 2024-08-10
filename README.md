@@ -26,4 +26,4 @@ import (
 ## References
 
 - [go-errors/errors](https://github.com/go-errors/errors)
-- [cockroachdb/errors](https://github.com/cockroachdb/errors]
+- [cockroachdb/errors](https://github.com/cockroachdb/errors)

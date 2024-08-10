@@ -1,7 +1,9 @@
 package errors_test
 
 import (
+	"bytes"
 	"fmt"
+	"log/slog"
 	"strings"
 	"testing"
 
@@ -213,4 +215,20 @@ func TestWithStack(t *testing.T) {
 			}
 		}
 	})
+}
+
+func TestSlogJSON(t *testing.T) {
+	buf := new(bytes.Buffer)
+	logger := slog.New(slog.NewJSONHandler(buf, nil))
+	err := l()
+	logger.Info("test", slog.Any("stacktracs", errors.StackTraces(err)))
+	if !strings.Contains(buf.String(), `"stacktracs"`) {
+		t.Error("stacktracs not found")
+	}
+	if !strings.Contains(buf.String(), `"error":"error a"`) {
+		t.Error(`"error":"error a" not found`)
+	}
+	if !strings.Contains(buf.String(), `"frames":[{`) {
+		t.Error(`"frames":[{ not found`)
+	}
 }

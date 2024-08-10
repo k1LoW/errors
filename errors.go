@@ -1,6 +1,7 @@
 package errors
 
 import (
+	"encoding/json"
 	"errors"
 	"runtime"
 )
@@ -104,6 +105,17 @@ func (errws *errorWithStack) Error() string {
 
 func (errws *errorWithStack) Unwrap() error {
 	return errws.Err
+}
+
+func (errws *errorWithStack) MarshalJSON() ([]byte, error) {
+	s := struct {
+		Error  string  `json:"error"`
+		Frames []frame `json:"frames"`
+	}{
+		Error:  errws.Error(),
+		Frames: errws.Frames,
+	}
+	return json.Marshal(s)
 }
 
 type joinError interface {

@@ -105,15 +105,9 @@ type frame struct {
 func (traces stackTraces) String() string {
 	var sb strings.Builder
 	for _, errws := range traces {
-		sb.WriteString(errws.Error())
-		sb.WriteString("\n")
+		sb.WriteString(fmt.Sprintf("%s\n", errws.Error()))
 		for _, frame := range errws.Frames {
-			sb.WriteString(frame.Name)
-			sb.WriteString("\n\t")
-			sb.WriteString(frame.File)
-			sb.WriteString(":")
-			sb.WriteString(fmt.Sprintf("%d", frame.Line))
-			sb.WriteString("\n")
+			sb.WriteString(fmt.Sprintf("%s\n\t%s:%d\n", frame.Name, frame.File, frame.Line))
 		}
 	}
 	return sb.String()

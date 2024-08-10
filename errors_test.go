@@ -2,6 +2,7 @@ package errors_test
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"strings"
@@ -215,6 +216,32 @@ func TestWithStack(t *testing.T) {
 			}
 		}
 	})
+}
+
+func TestJSON(t *testing.T) {
+	err := l()
+	b, err := json.Marshal(errors.StackTraces(err))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Contains(b, []byte(`"error":"error a"`)) {
+		t.Error(`"error":"error a" not found`)
+	}
+	if !bytes.Contains(b, []byte(`"frames":[{`)) {
+		t.Error(`"frames":[{ not found`)
+	}
+}
+
+func TestString(t *testing.T) {
+	err := l()
+	s := errors.StackTraces(err).String()
+	t.Log(s)
+	if !strings.Contains(s, "error a\n") {
+		t.Error(`"error a\n\t" not found`)
+	}
+	if !strings.Contains(s, ".a\n\t") {
+		t.Error(`".a\n\t" not found`)
+	}
 }
 
 func TestSlogJSON(t *testing.T) {

@@ -31,6 +31,14 @@ func j() error { return errors.Join(a(), i()) }
 func k() error { return fmt.Errorf("error k: %w", i()) }
 func l() error { return errors.Join(a(), k()) }
 
+func m() (err error) {
+	defer func() {
+		err = errors.WithStack(err)
+	}()
+
+	return errors.New("error m")
+}
+
 func TestWithStack(t *testing.T) {
 	t.Run("nil error", func(t *testing.T) {
 		err := errors.WithStack(nil)
@@ -271,5 +279,26 @@ func TestSlogText(t *testing.T) {
 	}
 	if !strings.Contains(buf.String(), "error a\\n") {
 		t.Error("error a\\n not found")
+	}
+}
+
+func TestWithDefer(t *testing.T) {
+	err := m()
+	traces := errors.StackTraces(err)
+	if len(traces) != 1 {
+		t.Errorf("got: %d, want: %d", len(traces), 1)
+	}
+	trace := traces[0]
+	if want := "error m"; trace.Err.Error() != want {
+		t.Errorf("got: %s, want: %s", trace.Err.Error(), want)
+	}
+	if !strings.Contains(trace.Frames[0].Name, ".m") {
+		t.Errorf("stack trace of m() not found: %v", trace.Frames[0])
+	}
+	if !strings.Contains(trace.Frames[1].Name, ".m") {
+		t.Errorf("stack trace of m() not found: %v", trace.Frames[1])
+	}
+	if strings.Contains(trace.Frames[2].Name, ".m") {
+		t.Errorf("stack trace of m() found: %v", trace.Frames[2])
 	}
 }

@@ -258,7 +258,7 @@ func TestWithDefer(t *testing.T) {
 	assertFrames(t, trace.Frames, "errors_test.m", "errors_test.m")
 }
 
-func TestWithPallarel(t *testing.T) {
+func TestWithGo(t *testing.T) {
 	var err error
 	mu := sync.Mutex{}
 	sg := sync.WaitGroup{}

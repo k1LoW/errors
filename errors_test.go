@@ -58,15 +58,7 @@ func TestWithStack(t *testing.T) {
 			t.Errorf("got: %d, want: %d", len(traces), 1)
 		}
 		trace := traces[0]
-		if !strings.Contains(trace.Frames[0].Name, ".a") {
-			t.Errorf("stack trace of a() not found: %v", trace.Frames[0])
-		}
-		if !strings.Contains(trace.Frames[1].Name, ".b") {
-			t.Errorf("stack trace of b() not found: %v", trace.Frames[1])
-		}
-		if !strings.Contains(trace.Frames[2].Name, ".c") {
-			t.Errorf("stack trace of c() not found: %v", trace.Frames[2])
-		}
+		assertFrames(t, trace.Frames, "errors_test.a", "errors_test.b", "errors_test.c")
 	})
 
 	t.Run("wrapped stack is retained.", func(t *testing.T) {
@@ -86,15 +78,7 @@ func TestWithStack(t *testing.T) {
 		if want := "error a"; trace.Err.Error() != want {
 			t.Errorf("got: %s, want: %s", trace.Err.Error(), want)
 		}
-		if !strings.Contains(trace.Frames[0].Name, ".a") {
-			t.Errorf("stack trace of a() not found: %v", trace.Frames[0])
-		}
-		if !strings.Contains(trace.Frames[1].Name, ".d") {
-			t.Errorf("stack trace of d() not found: %v", trace.Frames[1])
-		}
-		if !strings.Contains(trace.Frames[2].Name, ".e") {
-			t.Errorf("stack trace of e() found: %v", trace.Frames[2])
-		}
+		assertFrames(t, trace.Frames, "errors_test.a", "errors_test.d", "errors_test.e")
 	})
 
 	t.Run("joined stack is retained.", func(t *testing.T) {
@@ -114,12 +98,7 @@ func TestWithStack(t *testing.T) {
 			if want := "error a"; trace.Err.Error() != want {
 				t.Errorf("got: %s, want: %s", trace.Err.Error(), want)
 			}
-			if !strings.Contains(trace.Frames[0].Name, ".a") {
-				t.Errorf("stack trace of a() not found: %v", trace.Frames[0])
-			}
-			if !strings.Contains(trace.Frames[1].Name, ".g") {
-				t.Errorf("stack trace of g() not found: %v", trace.Frames[1])
-			}
+			assertFrames(t, trace.Frames, "errors_test.a", "errors_test.g")
 		}
 		{
 			err := h()
@@ -137,12 +116,7 @@ func TestWithStack(t *testing.T) {
 			if want := "error a"; trace.Err.Error() != want {
 				t.Errorf("got: %s, want: %s", trace.Err.Error(), want)
 			}
-			if !strings.Contains(trace.Frames[0].Name, ".a") {
-				t.Errorf("stack trace of a() not found: %v", trace.Frames[0])
-			}
-			if !strings.Contains(trace.Frames[1].Name, ".h") {
-				t.Errorf("stack trace of g() not found: %v", trace.Frames[1])
-			}
+			assertFrames(t, trace.Frames, "errors_test.a", "errors_test.h")
 		}
 		{
 			err := j()
@@ -165,22 +139,12 @@ func TestWithStack(t *testing.T) {
 			if want := "error a"; traceA.Err.Error() != want {
 				t.Errorf("got: %s, want: %s", traceA.Err.Error(), want)
 			}
-			if !strings.Contains(traceA.Frames[0].Name, ".a") {
-				t.Errorf("stack trace of a() not found: %v", traceA.Frames[0])
-			}
-			if !strings.Contains(traceA.Frames[1].Name, ".j") {
-				t.Errorf("stack trace of g() not found: %v", traceA.Frames[1])
-			}
+			assertFrames(t, traceA.Frames, "errors_test.a", "errors_test.j")
 
 			if want := "error i"; traceI.Err.Error() != want {
 				t.Errorf("got: %s, want: %s", traceI.Err.Error(), want)
 			}
-			if !strings.Contains(traceI.Frames[0].Name, ".i") {
-				t.Errorf("stack trace of i() not found: %v", traceI.Frames[0])
-			}
-			if !strings.Contains(traceI.Frames[1].Name, ".j") {
-				t.Errorf("stack trace of j() not found: %v", traceI.Frames[1])
-			}
+			assertFrames(t, traceI.Frames, "errors_test.i", "errors_test.j")
 		}
 
 		{
@@ -204,25 +168,12 @@ func TestWithStack(t *testing.T) {
 			if want := "error a"; traceA.Err.Error() != want {
 				t.Errorf("got: %s, want: %s", traceA.Err.Error(), want)
 			}
-			if !strings.Contains(traceA.Frames[0].Name, ".a") {
-				t.Errorf("stack trace of a() not found: %v", traceA.Frames[0])
-			}
-			if !strings.Contains(traceA.Frames[1].Name, ".l") {
-				t.Errorf("stack trace of l() not found: %v", traceA.Frames[1])
-			}
+			assertFrames(t, traceA.Frames, "errors_test.a", "errors_test.l")
 
 			if want := "error i"; traceI.Err.Error() != want {
 				t.Errorf("got: %s, want: %s", traceI.Err.Error(), want)
 			}
-			if !strings.Contains(traceI.Frames[0].Name, ".i") {
-				t.Errorf("stack trace of i() not found: %v", traceI.Frames[0])
-			}
-			if !strings.Contains(traceI.Frames[1].Name, ".k") {
-				t.Errorf("stack trace of k() not found: %v", traceI.Frames[1])
-			}
-			if !strings.Contains(traceI.Frames[2].Name, ".l") {
-				t.Errorf("stack trace of l() not found: %v", traceI.Frames[2])
-			}
+			assertFrames(t, traceI.Frames, "errors_test.i", "errors_test.k", "errors_test.l")
 		}
 	})
 }
@@ -293,15 +244,7 @@ func TestWithDefer(t *testing.T) {
 	if want := "error m"; trace.Err.Error() != want {
 		t.Errorf("got: %s, want: %s", trace.Err.Error(), want)
 	}
-	if !strings.Contains(trace.Frames[0].Name, ".m") {
-		t.Errorf("stack trace of m() not found: %v", trace.Frames[0])
-	}
-	if !strings.Contains(trace.Frames[1].Name, ".m") {
-		t.Errorf("stack trace of m() not found: %v", trace.Frames[1])
-	}
-	if strings.Contains(trace.Frames[2].Name, ".m") {
-		t.Errorf("stack trace of m() found: %v", trace.Frames[2])
-	}
+	assertFrames(t, trace.Frames, "errors_test.m", "errors_test.m")
 }
 
 func TestWithPallarel(t *testing.T) {
@@ -325,5 +268,14 @@ func TestWithPallarel(t *testing.T) {
 	traces := errors.StackTraces(err)
 	if len(traces) != 3 {
 		t.Errorf("got: %d, want: %d", len(traces), 2)
+	}
+}
+
+func assertFrames(t *testing.T, frames []errors.Frame, names ...string) {
+	t.Helper()
+	for i, name := range names {
+		if !strings.Contains(frames[i].Name, name) {
+			t.Errorf("stack trace of %s not found: %v", name, frames[i])
+		}
 	}
 }

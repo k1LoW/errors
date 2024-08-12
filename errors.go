@@ -112,7 +112,7 @@ func (traces stackTraces) String() string {
 		if i > 0 {
 			sb.WriteString("\n")
 		}
-		sb.WriteString(fmt.Sprintf("%s", errws.Error()))
+		sb.WriteString(errws.Error())
 		for _, frame := range errws.Frames {
 			sb.WriteString(fmt.Sprintf("\n%s\n\t%s:%d", frame.Name, frame.File, frame.Line))
 		}

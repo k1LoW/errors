@@ -93,11 +93,11 @@ type stackTraces []*errorWithStack
 
 type errorWithStack struct {
 	Err    error
-	Frames []frame
+	Frames []Frame
 	stack  []uintptr
 }
 
-type frame struct {
+type Frame struct {
 	Name string `json:"name"`
 	File string `json:"file"`
 	Line int    `json:"line"`
@@ -126,7 +126,7 @@ func (errws *errorWithStack) Unwrap() error {
 func (errws *errorWithStack) MarshalJSON() ([]byte, error) {
 	s := struct {
 		Error  string  `json:"error"`
-		Frames []frame `json:"frames"`
+		Frames []Frame `json:"frames"`
 	}{
 		Error:  errws.Error(),
 		Frames: errws.Frames,
@@ -140,14 +140,14 @@ type joinError interface {
 
 func (errws *errorWithStack) genFrames() {
 	if errws.Frames == nil {
-		errws.Frames = make([]frame, len(errws.stack))
+		errws.Frames = make([]Frame, len(errws.stack))
 
 		for i, pc := range errws.stack {
 			// ref: https://github.com/go-errors/errors/blob/83795c27c02f5cdeaf9a5c3c3fd2709376f20b79/Frame.go#L36-L37
 			fn := runtime.FuncForPC(pc - 1)
 			name := fn.Name()
 			file, line := fn.FileLine(pc - 1)
-			errws.Frames[i] = frame{
+			errws.Frames[i] = Frame{
 				Name: name,
 				File: file,
 				Line: line,

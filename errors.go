@@ -83,7 +83,7 @@ func StackTraces(err error) stackTraces {
 	}
 	var errws *errorWithStack
 	if !errors.As(err, &errws) {
-		return nil
+		return stackTraces{}
 	}
 	errws.genFrames()
 	return stackTraces{errws}

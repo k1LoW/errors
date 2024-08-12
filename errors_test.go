@@ -190,6 +190,17 @@ func TestJSON(t *testing.T) {
 	if !bytes.Contains(b, []byte(`"frames":[{`)) {
 		t.Error(`"frames":[{ not found`)
 	}
+
+	t.Run("zero frames", func(t *testing.T) {
+		err := errors.New("error new")
+		b, err := json.Marshal(errors.StackTraces(err))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if want := []byte(`[]`); !bytes.Equal(b, want) {
+			t.Errorf("got: %s, want: %s", b, want)
+		}
+	})
 }
 
 func TestString(t *testing.T) {

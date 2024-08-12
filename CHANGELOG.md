@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.3.0](https://github.com/k1LoW/errors/compare/v0.2.1...v0.3.0) - 2024-08-12
+### Breaking Changes 🛠
+- Returns a zero stack trace if there is no stack trace. by @k1LoW in https://github.com/k1LoW/errors/pull/8
+### Other Changes
+- Export frame by @k1LoW in https://github.com/k1LoW/errors/pull/7
+
 ## [v0.2.1](https://github.com/k1LoW/errors/compare/v0.2.0...v0.2.1) - 2024-08-10
 ### Other Changes
 - Set extra credits by @k1LoW in https://github.com/k1LoW/errors/pull/5

@@ -269,13 +269,27 @@ func TestWithPallarel(t *testing.T) {
 	if len(traces) != 3 {
 		t.Errorf("got: %d, want: %d", len(traces), 2)
 	}
+	for _, trace := range traces {
+		switch trace.Err.Error() {
+		case "error a":
+			if strings.Contains(trace.Frames[1].Name, "errors_test.b") {
+				assertFrames(t, trace.Frames, "errors_test.a", "errors_test.b", "errors_test.c")
+			} else {
+				assertFrames(t, trace.Frames, "errors_test.a", "errors_test.l")
+			}
+		case "error i":
+			assertFrames(t, trace.Frames, "errors_test.i", "errors_test.k", "errors_test.l")
+		default:
+			t.Errorf("unknown error: %v", trace.Err)
+		}
+	}
 }
 
 func assertFrames(t *testing.T, frames []errors.Frame, names ...string) {
 	t.Helper()
 	for i, name := range names {
 		if !strings.Contains(frames[i].Name, name) {
-			t.Errorf("stack trace of %s not found: %v", name, frames[i])
+			t.Errorf("stack trace of %s (%d) not found: %v", name, i, frames)
 		}
 	}
 }

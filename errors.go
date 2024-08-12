@@ -9,8 +9,9 @@ import (
 )
 
 var (
-	_ error        = (*errorWithStack)(nil)
-	_ fmt.Stringer = (stackTraces)(nil)
+	_ error          = (*errorWithStack)(nil)
+	_ json.Marshaler = (*errorWithStack)(nil)
+	_ fmt.Stringer   = (stackTraces)(nil)
 )
 
 // MaxStackDepth is the maximum depth of the stack trace.

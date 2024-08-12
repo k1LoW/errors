@@ -1,5 +1,7 @@
 # Changelog
 
+## [v0.3.2](https://github.com/k1LoW/errors/compare/v0.3.1...v0.3.2) - 2024-08-12
+
 ## [v0.3.1](https://github.com/k1LoW/errors/compare/v0.3.0...v0.3.1) - 2024-08-12
 ### Breaking Changes 🛠
 - Fix outout of stack traces in text format. by @k1LoW in https://github.com/k1LoW/errors/pull/9

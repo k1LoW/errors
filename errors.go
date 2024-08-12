@@ -92,8 +92,8 @@ func StackTraces(err error) stackTraces {
 type stackTraces []*errorWithStack
 
 type errorWithStack struct {
-	Err    error   `json:"error"`
-	Frames []frame `json:"frames"`
+	Err    error
+	Frames []frame
 	stack  []uintptr
 }
 

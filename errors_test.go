@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 	"strings"
+	"sync"
 	"testing"
 
 	"github.com/k1LoW/errors"
@@ -300,5 +301,29 @@ func TestWithDefer(t *testing.T) {
 	}
 	if strings.Contains(trace.Frames[2].Name, ".m") {
 		t.Errorf("stack trace of m() found: %v", trace.Frames[2])
+	}
+}
+
+func TestWithPallarel(t *testing.T) {
+	var err error
+	mu := sync.Mutex{}
+	sg := sync.WaitGroup{}
+	sg.Add(2)
+	go func() {
+		mu.Lock()
+		defer mu.Unlock()
+		err = errors.Join(err, c())
+		sg.Done()
+	}()
+	go func() {
+		mu.Lock()
+		defer mu.Unlock()
+		err = errors.Join(err, l())
+		sg.Done()
+	}()
+	sg.Wait()
+	traces := errors.StackTraces(err)
+	if len(traces) != 3 {
+		t.Errorf("got: %d, want: %d", len(traces), 2)
 	}
 }

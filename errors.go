@@ -145,19 +145,20 @@ type joinError interface {
 }
 
 func (errws *errorWithStack) genFrames() {
-	if errws.Frames == nil {
-		errws.Frames = make([]Frame, len(errws.stack))
+	if errws.Frames != nil {
+		return
+	}
+	errws.Frames = make([]Frame, len(errws.stack))
 
-		for i, pc := range errws.stack {
-			// ref: https://github.com/go-errors/errors/blob/83795c27c02f5cdeaf9a5c3c3fd2709376f20b79/Frame.go#L36-L37
-			fn := runtime.FuncForPC(pc - 1)
-			name := fn.Name()
-			file, line := fn.FileLine(pc - 1)
-			errws.Frames[i] = Frame{
-				Name: name,
-				File: file,
-				Line: line,
-			}
+	for i, pc := range errws.stack {
+		// ref: https://github.com/go-errors/errors/blob/83795c27c02f5cdeaf9a5c3c3fd2709376f20b79/Frame.go#L36-L37
+		fn := runtime.FuncForPC(pc - 1)
+		name := fn.Name()
+		file, line := fn.FileLine(pc - 1)
+		errws.Frames[i] = Frame{
+			Name: name,
+			File: file,
+			Line: line,
 		}
 	}
 }

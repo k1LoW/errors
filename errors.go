@@ -8,7 +8,10 @@ import (
 	"strings"
 )
 
-var _ error = (*errorWithStack)(nil)
+var (
+	_ error        = (*errorWithStack)(nil)
+	_ fmt.Stringer = (stackTraces)(nil)
+)
 
 // MaxStackDepth is the maximum depth of the stack trace.
 var MaxStackDepth = 50

@@ -206,13 +206,16 @@ func TestJSON(t *testing.T) {
 func TestString(t *testing.T) {
 	err := l()
 	s := errors.StackTraces(err).String()
-	t.Log(s)
 	if !strings.Contains(s, "error a\n") {
 		t.Error(`"error a\n\t" not found`)
 	}
 	if !strings.Contains(s, ".a\n\t") {
 		t.Error(`".a\n\t" not found`)
 	}
+	if strings.HasSuffix(s, "\n") {
+		t.Error(`"\n" found`)
+	}
+	t.Log(s)
 }
 
 func TestSlogJSON(t *testing.T) {

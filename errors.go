@@ -63,7 +63,7 @@ func WithStack(err error) error {
 
 	var errws *errorWithStack
 	if errors.As(err, &errws) {
-		return errws
+		return err
 	} else {
 		errws = &errorWithStack{
 			Err:   err,

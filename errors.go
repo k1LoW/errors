@@ -58,19 +58,18 @@ func WithStack(err error) error {
 		return nil
 	}
 
-	stack := make([]uintptr, MaxStackDepth)
-	length := runtime.Callers(2, stack[:])
-
 	var errws *errorWithStack
 	if errors.As(err, &errws) {
 		return err
-	} else {
-		errws = &errorWithStack{
-			Err:   err,
-			stack: stack[:length],
-		}
 	}
-	return errws
+
+	stack := make([]uintptr, MaxStackDepth)
+	length := runtime.Callers(2, stack[:])
+
+	return &errorWithStack{
+		Err:   err,
+		stack: stack[:length],
+	}
 }
 
 // StackTraces returns the stack traces of the given error(s).

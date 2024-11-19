@@ -1,3 +1,3 @@
 module github.com/k1LoW/errors
 
-go 1.21.13
+go 1.22

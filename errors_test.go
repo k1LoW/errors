@@ -53,12 +53,14 @@ func TestWithStack(t *testing.T) {
 		if !errors.Is(err, errA) {
 			t.Error("error not found")
 		}
-		traces := errors.StackTraces(err)
-		if len(traces) != 1 {
-			t.Errorf("got: %d, want: %d", len(traces), 1)
+		for range 2 {
+			traces := errors.StackTraces(err)
+			if len(traces) != 1 {
+				t.Errorf("got: %d, want: %d", len(traces), 1)
+			}
+			trace := traces[0]
+			assertFrames(t, trace.Frames, "errors_test.a", "errors_test.b", "errors_test.c")
 		}
-		trace := traces[0]
-		assertFrames(t, trace.Frames, "errors_test.a", "errors_test.b", "errors_test.c")
 	})
 
 	t.Run("wrapped stack is retained.", func(t *testing.T) {
@@ -222,9 +224,9 @@ func TestSlogJSON(t *testing.T) {
 	buf := new(bytes.Buffer)
 	logger := slog.New(slog.NewJSONHandler(buf, nil))
 	err := l()
-	logger.Info("test", slog.Any("stacktracs", errors.StackTraces(err)))
-	if !strings.Contains(buf.String(), `"stacktracs"`) {
-		t.Error("stacktracs not found")
+	logger.Info("test", slog.Any("stacktraces", errors.StackTraces(err)))
+	if !strings.Contains(buf.String(), `"stacktraces"`) {
+		t.Error("stacktraces not found")
 	}
 	if !strings.Contains(buf.String(), `"error":"error a"`) {
 		t.Error(`"error":"error a" not found`)
@@ -238,10 +240,10 @@ func TestSlogText(t *testing.T) {
 	buf := new(bytes.Buffer)
 	logger := slog.New(slog.NewTextHandler(buf, nil))
 	err := l()
-	logger.Info("test", slog.Any("stacktracs", errors.StackTraces(err)))
+	logger.Info("test", slog.Any("stacktraces", errors.StackTraces(err)))
 	t.Log(buf.String())
-	if !strings.Contains(buf.String(), `stacktracs=`) {
-		t.Error("stacktracs= not found")
+	if !strings.Contains(buf.String(), `stacktraces=`) {
+		t.Error("stacktraces= not found")
 	}
 	if !strings.Contains(buf.String(), "error a\\n") {
 		t.Error("error a\\n not found")

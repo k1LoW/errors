@@ -18,6 +18,10 @@ import (
 )
 ```
 
+## Example
+
+https://go.dev/play/p/8zQvFThxI4O
+
 ## Difference between `errors` and `k1LoW/errors`
 
 - The behaviour of methods with the same name as the [`errors`](https://pkg.go.dev/errors) package is the same.

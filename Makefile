@@ -26,7 +26,8 @@ prerelease:
 	git tag ${VER}
 
 prerelease_for_tagpr: depsdev
-	gocredits -w . 
+	gocredits -w .
+	cat _EXTRA_CREDITS >> CREDITS
 	git add CHANGELOG.md CREDITS go.mod
 
 .PHONY: default test

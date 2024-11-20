@@ -1,5 +1,7 @@
 # Changelog
 
+## [v1.0.1](https://github.com/k1LoW/errors/compare/v1.0.0...v1.0.1) - 2024-11-20
+
 ## [v1.0.0](https://github.com/k1LoW/errors/compare/v0.3.3...v1.0.0) - 2024-11-20
 ### Other Changes
 - Fix some by @k1LoW in https://github.com/k1LoW/errors/pull/16

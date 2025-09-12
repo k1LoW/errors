@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.1.0](https://github.com/k1LoW/errors/compare/v1.0.0...v1.1.0) - 2025-09-12
+### New Features 🎉
+- feat: add `Errors` for separating joined errors. by @k1LoW in https://github.com/k1LoW/errors/pull/21
+### Other Changes
+- chore(deps): bump the dependencies group across 1 directory with 2 updates by @dependabot[bot] in https://github.com/k1LoW/errors/pull/22
+
 ## [v1.0.0](https://github.com/k1LoW/errors/compare/v0.3.3...v1.0.0) - 2024-11-20
 ### Other Changes
 - Fix some by @k1LoW in https://github.com/k1LoW/errors/pull/16

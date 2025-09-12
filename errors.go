@@ -92,6 +92,25 @@ func StackTraces(err error) stackTraces {
 	return stackTraces{errws}
 }
 
+// Errors returns all joined errors in the given error.
+func Errors(err error) []error {
+	je, ok := err.(joinError)
+	if !ok {
+		return []error{err}
+	}
+	errs := je.Unwrap()
+	var splitted []error
+	for _, e := range errs {
+		errrs := Errors(e)
+		if len(errrs) > 1 {
+			splitted = append(splitted, Errors(e)...)
+			continue
+		}
+		splitted = append(splitted, e)
+	}
+	return splitted
+}
+
 type stackTraces []*errorWithStack
 
 type errorWithStack struct {

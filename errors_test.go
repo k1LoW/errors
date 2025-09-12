@@ -3,6 +3,7 @@ package errors_test
 import (
 	"bytes"
 	"encoding/json"
+	stderrors "errors"
 	"fmt"
 	"log/slog"
 	"strings"
@@ -359,6 +360,44 @@ func TestWithGo(t *testing.T) {
 			t.Errorf("unknown error: %v", trace.Err)
 		}
 	}
+}
+
+type testError struct {
+	msg string
+}
+
+func (e *testError) Error() string {
+	return e.msg
+}
+
+func TestConpatibility(t *testing.T) {
+	t.Run("errors.Is", func(t *testing.T) {
+		err := l()
+		if errors.Is(err, errA) != stderrors.Is(err, errA) {
+			t.Error("k1LoW/errors.Is and errors.Is are different")
+		}
+		if errors.Is(err, errI) != stderrors.Is(err, errI) {
+			t.Error("k1LoW/errors.Is and errors.Is are different")
+		}
+		if errors.Is(err, errF) != stderrors.Is(err, errF) {
+			t.Error("k1LoW/errors.Is and errors.Is are different")
+		}
+	})
+
+	t.Run("errors.As", func(t *testing.T) {
+		err := errors.Join(&testError{msg: "error a"}, errF)
+		var target *testError
+		if errors.As(err, &target) != stderrors.As(err, &target) {
+			t.Error("k1LoW/errors.As and errors.As are different")
+		}
+	})
+
+	t.Run("errors.Unwrap", func(t *testing.T) {
+		err := fmt.Errorf("error wrap: %w", errA)
+		if !errors.Is(errors.Unwrap(err), stderrors.Unwrap(err)) {
+			t.Error("k1LoW/errors.Unwrap and errors.Unwrap are different")
+		}
+	})
 }
 
 func assertFrames(t *testing.T, frames []errors.Frame, names ...string) {

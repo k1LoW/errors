@@ -180,6 +180,66 @@ func TestWithStack(t *testing.T) {
 	})
 }
 
+func TestErrors(t *testing.T) {
+	tests := []struct {
+		name string
+		err  error
+		want []string
+	}{
+		{
+			name: "split joined errors",
+			err:  errors.Join(errA, errF, errI),
+			want: []string{
+				"error a",
+				"error f",
+				"error i",
+			},
+		},
+		{
+			name: "split nested joined errors",
+			err:  errors.Join(errA, errors.Join(errF, errI)),
+			want: []string{
+				"error a",
+				"error f",
+				"error i",
+			},
+		},
+		{
+			name: "split only without flattening duplicate errors",
+			err:  errors.Join(errors.Join(errA, errI), errors.Join(errF, errI)),
+			want: []string{
+				"error a",
+				"error i",
+				"error f",
+				"error i",
+			},
+		},
+		{
+			name: "not joined error",
+			err:  errA,
+			want: []string{
+				"error a",
+			},
+		},
+	}
+	for _, tt := range tests {
+		errs := errors.Errors(tt.err)
+		for i, err := range errs {
+			t.Log(i, err)
+		}
+
+		if got := len(errs); got != len(tt.want) {
+			t.Errorf("got: %d, want: %d", got, len(tt.want))
+			continue
+		}
+		for i, w := range tt.want {
+			if got := errs[i].Error(); got != w {
+				t.Errorf("got: %s, want: %s", got, w)
+			}
+		}
+	}
+}
+
 func TestJSON(t *testing.T) {
 	err := l()
 	b, err := json.Marshal(errors.StackTraces(err))

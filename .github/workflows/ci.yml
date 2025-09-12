@@ -1,4 +1,4 @@
-name: CI
+name: build
 
 on:
   push:
@@ -10,34 +10,30 @@ jobs:
   job-test:
     name: Test
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Check out source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
         with:
           go-version-file: go.mod
-          cache: true
 
       - name: Run lint
-        uses: reviewdog/action-golangci-lint@v2
+        uses: reviewdog/action-golangci-lint@f9bba13753278f6a73b27a56a3ffb1bfda90ed71 # v2.8.0
         with:
-          fail_on_error: true
+          fail_level: warning
           go_version_file: go.mod
-          golangci_lint_flags: --timeout=5m
-
-      - name: Check oldstable
-        uses: k1LoW/oldstable@v1
-        with:
-          lax: true
 
       - name: Run tests
         run: make ci
 
       - name: Run octocov
-        uses: k1LoW/octocov-action@v1
+        uses: k1LoW/octocov-action@73d561f65d59e66899ed5c87e4621a913b5d5c20 # v1.5.0

@@ -101,12 +101,7 @@ func Errors(err error) []error {
 	errs := je.Unwrap()
 	var splitted []error
 	for _, e := range errs {
-		errrs := Errors(e)
-		if len(errrs) > 1 {
-			splitted = append(splitted, Errors(e)...)
-			continue
-		}
-		splitted = append(splitted, e)
+		splitted = append(splitted, Errors(e)...)
 	}
 	return splitted
 }

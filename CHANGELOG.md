@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.1.2](https://github.com/k1LoW/errors/compare/v1.1.1...v1.1.2) - 2026-02-02
+### Other Changes
+- chore(deps): bump the dependencies group across 1 directory with 2 updates by @dependabot[bot] in https://github.com/k1LoW/errors/pull/28
+- chore(deps): bump Songmu/tagpr from 1.10.0 to 1.11.0 in the dependencies group by @dependabot[bot] in https://github.com/k1LoW/errors/pull/30
+- chore(deps): bump the dependencies group with 2 updates by @dependabot[bot] in https://github.com/k1LoW/errors/pull/31
+- chore(deps): bump the dependencies group with 2 updates by @dependabot[bot] in https://github.com/k1LoW/errors/pull/32
+- chore(deps): bump Songmu/tagpr from 1.12.1 to 1.15.0 in the dependencies group by @dependabot[bot] in https://github.com/k1LoW/errors/pull/33
+
 ## [v1.1.1](https://github.com/k1LoW/errors/compare/v1.1.0...v1.1.1) - 2025-11-25
 ### Other Changes
 - test: add tests by @k1LoW in https://github.com/k1LoW/errors/pull/23

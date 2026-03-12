@@ -400,6 +400,56 @@ func TestConpatibility(t *testing.T) {
 	})
 }
 
+func TestAsType(t *testing.T) {
+	t.Run("match", func(t *testing.T) {
+		err := errors.Join(&testError{msg: "hello"}, errF)
+		got, ok := errors.AsType[*testError](err)
+		if !ok {
+			t.Fatal("AsType should return true")
+		}
+		if got.msg != "hello" {
+			t.Errorf("got: %s, want: %s", got.msg, "hello")
+		}
+	})
+
+	t.Run("no match", func(t *testing.T) {
+		err := errors.Join(errA, errF)
+		_, ok := errors.AsType[*testError](err)
+		if ok {
+			t.Fatal("AsType should return false")
+		}
+	})
+
+	t.Run("nil error", func(t *testing.T) {
+		_, ok := errors.AsType[*testError](nil)
+		if ok {
+			t.Fatal("AsType should return false for nil")
+		}
+	})
+
+	t.Run("wrapped", func(t *testing.T) {
+		err := fmt.Errorf("wrapped: %w", &testError{msg: "inner"})
+		got, ok := errors.AsType[*testError](err)
+		if !ok {
+			t.Fatal("AsType should return true for wrapped error")
+		}
+		if got.msg != "inner" {
+			t.Errorf("got: %s, want: %s", got.msg, "inner")
+		}
+	})
+
+	t.Run("with stack", func(t *testing.T) {
+		err := errors.WithStack(&testError{msg: "stacked"})
+		got, ok := errors.AsType[*testError](err)
+		if !ok {
+			t.Fatal("AsType should return true for error with stack")
+		}
+		if got.msg != "stacked" {
+			t.Errorf("got: %s, want: %s", got.msg, "stacked")
+		}
+	})
+}
+
 func assertFrames(t *testing.T, frames []errors.Frame, names ...string) {
 	t.Helper()
 	for i, name := range names {

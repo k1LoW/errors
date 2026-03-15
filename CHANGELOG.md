@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.1](https://github.com/k1LoW/errors/compare/v1.2.0...v1.2.1) - 2026-03-15
+### Other Changes
+- chore(deps): bump reviewdog/action-golangci-lint from 2.8.0 to 2.10.0 in the dependencies group by @dependabot[bot] in https://github.com/k1LoW/errors/pull/37
+
 ## [v1.2.0](https://github.com/k1LoW/errors/compare/v1.1.1...v1.2.0) - 2026-03-12
 ### New Features 🎉
 - feat: add AsType with build-tag-based polyfill for Go <1.26 by @k1LoW in https://github.com/k1LoW/errors/pull/36

@@ -1,5 +1,15 @@
 # Changelog
 
+## [v1.2.1](https://github.com/k1LoW/errors/compare/v1.2.0...v1.2.1) - 2026-06-29
+
+### Other Changes
+- chore(deps): bump reviewdog/action-golangci-lint from 2.8.0 to 2.10.0 in the dependencies group by @dependabot[bot] in https://github.com/k1LoW/errors/pull/37
+- chore(deps): bump the dependencies group with 2 updates by @dependabot[bot] in https://github.com/k1LoW/errors/pull/39
+- chore(deps): bump Songmu/tagpr from 1.18.1 to 1.18.2 in the dependencies group by @dependabot[bot] in https://github.com/k1LoW/errors/pull/40
+- chore(deps): bump Songmu/tagpr from 1.18.2 to 1.18.3 in the dependencies group by @dependabot[bot] in https://github.com/k1LoW/errors/pull/41
+- chore(deps): bump k1LoW/octocov-action from 1.5.0 to 1.5.1 in the dependencies group by @dependabot[bot] in https://github.com/k1LoW/errors/pull/42
+- chore(deps): bump the dependencies group across 1 directory with 3 updates by @dependabot[bot] in https://github.com/k1LoW/errors/pull/45
+
 ## [v1.2.0](https://github.com/k1LoW/errors/compare/v1.1.1...v1.2.0) - 2026-03-12
 ### New Features 🎉
 - feat: add AsType with build-tag-based polyfill for Go <1.26 by @k1LoW in https://github.com/k1LoW/errors/pull/36

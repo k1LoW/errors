@@ -370,7 +370,7 @@ func (e *testError) Error() string {
 	return e.msg
 }
 
-func TestConpatibility(t *testing.T) {
+func TestCompatibility(t *testing.T) {
 	t.Run("errors.Is", func(t *testing.T) {
 		err := l()
 		if errors.Is(err, errA) != stderrors.Is(err, errA) {

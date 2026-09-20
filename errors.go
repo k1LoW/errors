@@ -99,11 +99,11 @@ func Errors(err error) []error {
 		return []error{err}
 	}
 	errs := je.Unwrap()
-	var splitted []error
+	var split []error
 	for _, e := range errs {
-		splitted = append(splitted, Errors(e)...)
+		split = append(split, Errors(e)...)
 	}
-	return splitted
+	return split
 }
 
 type stackTraces []*errorWithStack
